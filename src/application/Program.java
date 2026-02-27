@@ -21,11 +21,12 @@ public class Program {
         IO.print("Check-out date (dd/MM/yyyy): ");
         LocalDate checkOut = LocalDate.parse(sc.next(), dtf);
 
-        Reservation reservation = null;
+
         if (!checkOut.isAfter(checkIn)) {
             IO.println("Error in reservation: Check-out date must be after check-in date ");
-        } else {
-            reservation = new Reservation(number, checkIn, checkOut);
+        }
+        else {
+            Reservation reservation = new Reservation(number, checkIn, checkOut);
             IO.println("Reservation: " + reservation);
 
             IO.println();
@@ -35,18 +36,13 @@ public class Program {
             IO.print("Check-out date (dd/MM/yyyy): ");
             checkOut = LocalDate.parse(sc.next(), dtf);
 
-            LocalDate now = LocalDate.now(ZoneId.systemDefault());
-
-            if (checkIn.isBefore(now) || checkOut.isBefore(now)) {
-                IO.println("Error in reservation: Reservation dates for update must be future dates");
-            }
-            else if (!checkOut.isAfter(checkIn)) {
-                IO.println("Error in reservation: Check-out date must be after check-in date ");
-            }
-            else {
-                reservation.updateDates(checkIn, checkOut);
-                IO.println("Reservation: " + reservation);
-        }
+                String error = reservation.updateDates(checkIn, checkOut);
+                if (error != null) {
+                    IO.println("Error in reservation: " + error);
+                }
+                else {
+                    IO.println("Reservation: " + reservation);
+                }
     }
         sc.close();
     }

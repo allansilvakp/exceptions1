@@ -1,6 +1,7 @@
 package model.entities;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -41,9 +42,20 @@ public class Reservation {
         return ChronoUnit.DAYS.between(checkIn, checkOut);
     }
 
-    public void updateDates(LocalDate checkIn, LocalDate checkOut) {
+    public String updateDates(LocalDate checkIn, LocalDate checkOut) {
+
+        LocalDate now = LocalDate.now(ZoneId.systemDefault());
+
+        if (checkIn.isBefore(now) || checkOut.isBefore(now)) {
+            return "Reservation dates for update must be future dates";
+        }
+        if (!checkOut.isAfter(checkIn)) {
+            return "Check-out date must be after check-in date ";
+        }
+
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+        return null;
     }
 
     @Override
